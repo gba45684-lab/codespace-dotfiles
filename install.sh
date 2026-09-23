@@ -11,8 +11,10 @@ DOTFILES_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 cp "$DOTFILES_DIR/.gemini/GEMINI.md" \
    "$HOME/.gemini/GEMINI.md"
 
-cp "$DOTFILES_DIR/.gemini/commands/"*.toml \
-   "$HOME/.gemini/commands/"
+if compgen -G "$DOTFILES_DIR/.gemini/commands/*.toml" > /dev/null; then
+    cp "$DOTFILES_DIR/.gemini/commands/"*.toml \
+       "$HOME/.gemini/commands/"
+fi
 
 echo ""
 echo "Gemini global configuration installed."
