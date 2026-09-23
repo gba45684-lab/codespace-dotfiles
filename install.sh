@@ -11,11 +11,7 @@ DOTFILES_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 cp "$DOTFILES_DIR/.gemini/GEMINI.md" \
    "$HOME/.gemini/GEMINI.md"
 
-<<<<<<< HEAD
 
-=======
-   "$HOME/.gemini/commands/"
->>>>>>> 6e1e679 (chore: configure global Gemini MCP workflow)
 
 echo ""
 echo "Gemini global configuration installed."
