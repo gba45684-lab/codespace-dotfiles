@@ -1,0 +1,39 @@
+description = "Perform a complete project audit"
+
+prompt = """
+Perform a complete audit of the current repository.
+
+Do not modify files.
+
+Inspect:
+
+1. Repository structure
+2. Framework
+3. Dependencies
+4. Architecture
+5. UI/UX
+6. Accessibility
+7. Security
+8. Performance
+9. API/backend integration
+10. Database integration
+11. Vercel configuration
+12. Tests
+13. Build configuration
+14. Mobile responsiveness
+15. Browser console risks
+16. Git status
+
+Use available MCP tools when useful.
+
+Return:
+
+- Critical issues
+- High priority issues
+- Medium priority issues
+- Low priority issues
+- Recommended improvements
+- Testing gaps
+
+Do not change anything.
+"""
