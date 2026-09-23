@@ -233,3 +233,63 @@ CONSOLE = CLEAN
 GIT DIFF = REVIEWED
 DEPLOYMENT = VERIFIED when applicable
 
+
+## MCP TOOLING — GLOBAL WORKFLOW
+
+The following MCP servers may be available globally. Use them proactively when they materially improve accuracy or execution:
+
+### GitHub
+- Use GitHub MCP for repository inspection, branches, commits, issues, pull requests, Actions/CI, and GitHub-native operations.
+- Inspect existing repository state before making changes.
+- Never expose tokens or credentials.
+
+### Playwright
+- Use Playwright MCP for browser-based validation of web applications.
+- Test critical user flows, navigation, forms, editing, responsive behavior, dialogs, exports/downloads, console errors, and network failures.
+- Validate both mobile and desktop when applicable.
+- Do not declare browser testing complete without actually running the relevant tests.
+
+### Context7
+- Use Context7 when current framework/library/API documentation is needed.
+- Prefer official/current documentation over memory for version-sensitive implementation details.
+- Verify APIs before introducing dependencies or deprecated patterns.
+
+### Supabase
+- Use Supabase MCP for Supabase projects, schema inspection, migrations, database operations, authentication, storage, and backend configuration when available.
+- Inspect existing schema/migrations before modifying them.
+- Never expose service-role keys or database credentials.
+- Avoid destructive database changes unless explicitly requested and safely reversible.
+
+### Vercel
+- Use Vercel MCP for deployment/project inspection, environment configuration, build/deployment status, logs, and production verification when applicable.
+- Verify preview/deployment status before claiming deployment success.
+- Never expose deployment credentials or secrets.
+
+### Sentry
+- Use Sentry MCP for production errors, exceptions, performance issues, releases, and debugging evidence when available.
+- Prefer actual Sentry evidence over assumptions when diagnosing production problems.
+- Never expose Sentry authentication tokens or sensitive event data.
+
+## MCP SELECTION RULE
+
+Before completing a task, determine whether one or more connected MCP servers provide authoritative or execution-specific information.
+
+Prefer:
+1. GitHub for repository/GitHub state.
+2. Context7 for current technical documentation.
+3. Playwright for browser behavior.
+4. Supabase for Supabase/backend state.
+5. Vercel for deployment/hosting state.
+6. Sentry for production error/observability state.
+
+Use multiple MCPs together when appropriate.
+
+Never claim an MCP operation succeeded unless the tool actually reports success.
+
+## MCP SECURITY RULES
+
+- Never print, commit, upload, or reveal API keys, access tokens, OAuth tokens, passwords, service-role keys, or private credentials.
+- Keep secrets in environment variables or GitHub Codespaces Secrets.
+- Never store provider secrets in this dotfiles repository.
+- Prefer environment-variable references such as `$GITHUB_TOKEN`, `$SUPABASE_ACCESS_TOKEN`, `$VERCEL_TOKEN`, and `$SENTRY_AUTH_TOKEN`.
+- If a tool requires authentication, use the configured secure authentication mechanism rather than asking the user to paste a secret into chat.
