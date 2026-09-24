@@ -293,3 +293,88 @@ Never claim an MCP operation succeeded unless the tool actually reports success.
 - Never store provider secrets in this dotfiles repository.
 - Prefer environment-variable references such as `$GITHUB_TOKEN`, `$SUPABASE_ACCESS_TOKEN`, `$VERCEL_TOKEN`, and `$SENTRY_AUTH_TOKEN`.
 - If a tool requires authentication, use the configured secure authentication mechanism rather than asking the user to paste a secret into chat.
+# GEMINI MASTER RULES
+
+Inspect first. Understand the existing project before changing anything.
+Preserve working functionality and unrelated user changes.
+Never use git reset --hard, force push, or destructive commands.
+Never expose, print, commit, or store secrets in source code.
+Use environment variables and secure secret stores for credentials.
+Follow existing architecture, conventions, dependencies, and design system.
+Make the smallest safe change that fully solves the task.
+
+## UI/UX
+Build premium, clean, modern, responsive, accessible, mobile-first interfaces.
+Preserve locked/final/approved UI exactly.
+Never redesign locked navigation, layout, spacing, typography, colors, cards, buttons, responsiveness, or existing interactions.
+Add new functionality inside or behind the existing UI.
+
+## CODE QUALITY
+Use maintainable, reusable, readable, type-safe code.
+Prefer small functions, semantic HTML, clear naming, and existing project patterns.
+Avoid duplicated logic, unnecessary dependencies, dead code, hacks, and unnecessary rewrites.
+
+## SECURITY
+Never expose, print, commit, or upload API keys, passwords, tokens, OAuth credentials, database credentials, or private secrets.
+Keep secrets in environment variables or secure secret stores.
+Never reveal secret values in terminal output, logs, screenshots, documentation, or commits.
+
+## MCP
+Use connected MCP tools when they provide authoritative information or execution capability.
+GitHub: repository, commits, PRs, issues, Actions.
+Context7: current official documentation.
+Playwright: browser and UI testing.
+Supabase: database and backend.
+Vercel: deployment and logs.
+Sentry: production errors and monitoring.
+Never claim an MCP operation succeeded without actual tool evidence.
+
+## TESTING
+Run relevant build, typecheck, lint, unit, integration, E2E, and browser tests.
+Check mobile, tablet, and desktop when applicable.
+Check console errors, network failures, broken assets, and accessibility.
+Fix the root cause of failures. Never hide or suppress test failures.
+Never claim something is tested unless it was actually tested.
+
+## GIT REVIEW
+Before and after changes run git status and git diff.
+Run git diff --check before completion.
+Preserve unrelated user changes and untracked files.
+## COMPLETION
+Report what changed, what was tested, what passed, what failed, and remaining limitations.
+Never claim fixed, tested, deployed, or verified without evidence.
+
+## WORKFLOW
+1. Inspect
+2. Plan
+3. Implement
+4. Test
+5. Review diff
+6. Report results
+Continue incomplete work when safe. Do not restart existing projects unnecessarily.
+
+## ACCESSIBILITY
+Use semantic HTML, keyboard navigation, visible focus, labels, accessible dialogs, sufficient contrast, and touch-friendly controls.
+
+## PERFORMANCE
+Prefer efficient rendering, optimized assets, sensible caching, minimal dependencies, and efficient network requests.
+Avoid unnecessary re-renders, blocking work, excessive polling, and expensive animations.
+
+## API
+Validate inputs, outputs, errors, timeouts, rate limits, and authorization.
+Never expose privileged credentials to clients.
+
+## DATABASE
+Inspect schema and migrations before changes. Avoid destructive operations. Preserve existing data.
+
+## AUTH
+Never trust client-side authorization. Protect sessions, roles, permissions, and privileged operations.
+
+## DOCUMENTATION
+Keep README, setup, environment, API, and deployment documentation synchronized with the real implementation.
+
+## DATA SAFETY
+Never delete or overwrite user files, backups, APKs, ZIPs, uploads, or generated artifacts without explicit approval.
+
+## QUALITY GATE
+Before completion: BUILD PASS, TYPECHECK PASS, LINT PASS, TESTS PASS, BROWSER PASS when applicable, CONSOLE CLEAN, GIT DIFF REVIEWED, DEPLOYMENT VERIFIED when applicable.

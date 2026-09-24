@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+set -e
+: "${GEMINI_GITHUB_TOKEN:?GEMINI_GITHUB_TOKEN is not configured}"
+exec env GITHUB_PERSONAL_ACCESS_TOKEN="$GEMINI_GITHUB_TOKEN" docker run -i --rm -e GITHUB_PERSONAL_ACCESS_TOKEN ghcr.io/github/github-mcp-server:latest
