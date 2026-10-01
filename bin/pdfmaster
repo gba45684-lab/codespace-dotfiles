@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-PROJECT_NAME="\${PDFMASTER_PROJECT_NAME:-pdf-tool}"
-WORKSPACE_ROOT="\${CODESPACES_WORKSPACE_FOLDER:-/workspaces}"
-PROJECT_DIR="\${WORKSPACE_ROOT}/\${PROJECT_NAME}"
-OWNER="\${PDFMASTER_GITHUB_OWNER:-gba45684-lab}"
-REPO="\${PDFMASTER_GITHUB_REPO:-\${PROJECT_NAME}}"
+PROJECT_NAME="${PDFMASTER_PROJECT_NAME:-pdf-tool}"
+WORKSPACE_ROOT="${CODESPACES_WORKSPACE_FOLDER:-/workspaces}"
+PROJECT_DIR="${WORKSPACE_ROOT}/${PROJECT_NAME}"
+OWNER="${PDFMASTER_GITHUB_OWNER:-gba45684-lab}"
+REPO="${PDFMASTER_GITHUB_REPO:-${PROJECT_NAME}}"
 
 die() { echo "ERROR: $*" >&2; exit 1; }
 have() { command -v "$1" >/dev/null 2>&1; }
@@ -128,7 +128,7 @@ run() {
   echo "======================================"
 }
 
-case "\${1:-run}" in
+case "${1:-run}" in
   init) init ;;
   ""|run|dev|test|build|audit|deploy|release) run ;;
   help|-h|--help)
