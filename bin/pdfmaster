@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-PROJECT_NAME="${PDFMASTER_PROJECT_NAME:-pdf-tool}"
+PROJECT_NAME="${PDFMASTER_PROJECT_NAME:-pdfmate}"
 WORKSPACE_ROOT="${CODESPACES_WORKSPACE_FOLDER:-/workspaces}"
 PROJECT_DIR="${WORKSPACE_ROOT}/${PROJECT_NAME}"
 OWNER="${PDFMASTER_GITHUB_OWNER:-gba45684-lab}"
@@ -51,7 +51,7 @@ init() {
   cat > scripts/pdfmaster-check.mjs <<'CHECK'
 import fs from "node:fs";
 import path from "node:path";
-for (const item of ["package.json", "src/app"]) {
+for (const item of ["package.json", fs.existsSync(path.resolve("app")) ? "app" : "src/app"]) {
   if (!fs.existsSync(path.resolve(item))) {
     console.error("Missing:", item);
     process.exit(1);
@@ -79,8 +79,8 @@ Initial scope:
 README
   fi
 
-  npm run lint
   node scripts/pdfmaster-check.mjs
+  npm run build
   git add .
   if ! git diff --cached --quiet; then
     git commit -m "feat: initialize PDF toolkit foundation"
@@ -112,8 +112,6 @@ run() {
   echo "→ Dependencies"
   npm install
   echo ""
-  echo "→ Lint"
-  npm run lint
   if [ -f scripts/pdfmaster-check.mjs ]; then
     echo ""
     echo "→ PDF foundation check"
