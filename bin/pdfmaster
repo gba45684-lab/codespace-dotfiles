@@ -130,13 +130,13 @@ run() {
 
 case "${1:-run}" in
   init) init ;;
-  ""|run|dev|test|build|audit|deploy|release) run ;;
+  "") run ;;
   help|-h|--help)
     printf '%s\n' \
       'PDFMASTER — two-command PDF platform workflow' \
       '' \
       '  pdfmaster init   Create/initialize the PDF application' \
-      '  pdfmaster        Inspect, install, lint, test and build' \
+      '  pdfmaster        Run the complete development workflow' \
       '' \
       'Environment overrides:' \
       '  PDFMASTER_PROJECT_NAME' \
