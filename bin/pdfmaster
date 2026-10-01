@@ -1,0 +1,147 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+PROJECT_NAME="\${PDFMASTER_PROJECT_NAME:-pdf-tool}"
+WORKSPACE_ROOT="\${CODESPACES_WORKSPACE_FOLDER:-/workspaces}"
+PROJECT_DIR="\${WORKSPACE_ROOT}/\${PROJECT_NAME}"
+OWNER="\${PDFMASTER_GITHUB_OWNER:-gba45684-lab}"
+REPO="\${PDFMASTER_GITHUB_REPO:-\${PROJECT_NAME}}"
+
+die() { echo "ERROR: $*" >&2; exit 1; }
+have() { command -v "$1" >/dev/null 2>&1; }
+
+init() {
+  echo "======================================"
+  echo " PDFMASTER INIT"
+  echo "======================================"
+
+  have git || die "git is required"
+  have gh || die "GitHub CLI (gh) is required"
+  have node || die "Node.js is required"
+  have npm || die "npm is required"
+  gh auth status >/dev/null 2>&1 || die "GitHub CLI is not authenticated. Run: gh auth login"
+
+  if [ -e "$PROJECT_DIR" ]; then
+    if [ -d "$PROJECT_DIR/.git" ]; then
+      echo "✓ Project already exists: $PROJECT_DIR"
+      cd "$PROJECT_DIR"
+    else
+      die "$PROJECT_DIR exists and is not a Git repository"
+    fi
+  else
+    if gh repo view "$OWNER/$REPO" >/dev/null 2>&1; then
+      echo "✓ GitHub repository already exists"
+      git clone "https://github.com/$OWNER/$REPO.git" "$PROJECT_DIR"
+      cd "$PROJECT_DIR"
+    else
+      echo "→ Creating Next.js application"
+      mkdir -p "$WORKSPACE_ROOT"
+      cd "$WORKSPACE_ROOT"
+      npx create-next-app@latest "$PROJECT_NAME" --ts --tailwind --eslint --app --src-dir --import-alias "@/*" --use-npm --no-turbopack
+      cd "$PROJECT_DIR"
+      echo "→ Creating GitHub repository"
+      gh repo create "$OWNER/$REPO" --public --description "AI-powered online PDF toolkit" --source=. --remote=origin --push
+    fi
+  fi
+
+  echo "→ Installing PDF foundation"
+  npm install pdf-lib pdfjs-dist
+  mkdir -p scripts
+
+  cat > scripts/pdfmaster-check.mjs <<'CHECK'
+import fs from "node:fs";
+import path from "node:path";
+for (const item of ["package.json", "src/app"]) {
+  if (!fs.existsSync(path.resolve(item))) {
+    console.error("Missing:", item);
+    process.exit(1);
+  }
+}
+console.log("PDFMASTER foundation check: PASS");
+CHECK
+
+  if [ ! -f README.md ]; then
+    cat > README.md <<'README'
+# PDF Tool
+
+AI-powered online PDF toolkit.
+
+## Master workflow
+
+    pdfmaster init
+    pdfmaster
+
+Initial scope:
+- Merge, split, compress and organize PDF files
+- PDF/image conversion
+- OCR and AI PDF features
+- Vercel/Supabase-ready architecture
+README
+  fi
+
+  npm run lint
+  node scripts/pdfmaster-check.mjs
+  git add .
+  if ! git diff --cached --quiet; then
+    git commit -m "feat: initialize PDF toolkit foundation"
+  fi
+  git push -u origin main 2>/dev/null || git push origin main
+
+  echo ""
+  echo "======================================"
+  echo " PDFMASTER INIT COMPLETE"
+  echo "======================================"
+  echo "Project: $PROJECT_DIR"
+  echo "Repository: https://github.com/$OWNER/$REPO"
+}
+
+run() {
+  if [ ! -d "$PROJECT_DIR/.git" ]; then
+    init
+    return
+  fi
+  cd "$PROJECT_DIR"
+  echo "======================================"
+  echo " PDFMASTER"
+  echo "======================================"
+  echo "Project: $PROJECT_DIR"
+  echo ""
+  echo "→ Git status"
+  git status --short
+  echo ""
+  echo "→ Dependencies"
+  npm install
+  echo ""
+  echo "→ Lint"
+  npm run lint
+  if [ -f scripts/pdfmaster-check.mjs ]; then
+    echo ""
+    echo "→ PDF foundation check"
+    node scripts/pdfmaster-check.mjs
+  fi
+  echo ""
+  echo "→ Production build"
+  npm run build
+  echo ""
+  echo "======================================"
+  echo " PDFMASTER CHECK COMPLETE"
+  echo "======================================"
+}
+
+case "\${1:-run}" in
+  init) init ;;
+  ""|run|dev|test|build|audit|deploy|release) run ;;
+  help|-h|--help)
+    printf '%s\n' \
+      'PDFMASTER — two-command PDF platform workflow' \
+      '' \
+      '  pdfmaster init   Create/initialize the PDF application' \
+      '  pdfmaster        Inspect, install, lint, test and build' \
+      '' \
+      'Environment overrides:' \
+      '  PDFMASTER_PROJECT_NAME' \
+      '  PDFMASTER_GITHUB_OWNER' \
+      '  PDFMASTER_GITHUB_REPO'
+    ;;
+  *) die "Unknown command: $1. Use: pdfmaster init or pdfmaster" ;;
+esac
