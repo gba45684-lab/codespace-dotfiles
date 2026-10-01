@@ -29,10 +29,14 @@ cp "$DOTFILES_DIR/.gemini/GEMINI.md" \
 cp "$DOTFILES_DIR/bin/github-mcp" \
    "$HOME/bin/github-mcp"
 
-chmod +x "$HOME/bin/github-mcp"
+cp "$DOTFILES_DIR/bin/pdfmaster" \
+   "$HOME/bin/pdfmaster"
+
+chmod +x "$HOME/bin/github-mcp" "$HOME/bin/pdfmaster"
 
 echo "✓ Global GEMINI.md installed"
 echo "✓ GitHub MCP wrapper installed"
+echo "✓ PDFMASTER CLI installed"
 
 # --------------------------------------------------
 # Gemini CLI
