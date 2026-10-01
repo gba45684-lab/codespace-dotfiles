@@ -84,6 +84,7 @@ add_mcp context7 \
 # Supabase
 add_mcp supabase \
     --transport http \
+    -H "Authorization: Bearer \$SUPABASE_ACCESS_TOKEN" \
     https://mcp.supabase.com/mcp
 
 # Vercel
